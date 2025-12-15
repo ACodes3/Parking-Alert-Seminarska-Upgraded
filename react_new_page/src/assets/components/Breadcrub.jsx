@@ -5,7 +5,7 @@ import AddWarden from "./modals/AddWarden";
 import ChooseLocationModal from "./modals/ChooseLoactionModal";
 import GPSModal from "./modals/GPSModal";
 
-const Breadcrub = () => {
+const Breadcrub = ({ showButtons = true }) => {
   const location = useLocation();
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
   const [isChooseLocationOpen, setIsChooseLocationOpen] = useState(false);
@@ -78,26 +78,28 @@ const Breadcrub = () => {
           })}
         </ol>
 
-        <div className="breadcrumb-actions">
-          <button 
-            className="breadcrumb-btn btn-report"
-            onClick={() => setIsAddWardenOpen(true)}
-          >
-            Prijavi redarja
-          </button>
-          <button 
-            className="breadcrumb-btn btn-location"
-            onClick={() => setIsChooseLocationOpen(true)}
-          >
-            Izberi lokacijo
-          </button>
-          <button 
-            className="breadcrumb-btn btn-gps"
-            onClick={() => setIsGPSOpen(true)}
-          >
-            GPS
-          </button>
-        </div>
+        {showButtons && (
+          <div className="breadcrumb-actions">
+            <button 
+              className="breadcrumb-btn btn-report"
+              onClick={() => setIsAddWardenOpen(true)}
+            >
+              Prijavi redarja
+            </button>
+            <button 
+              className="breadcrumb-btn btn-location"
+              onClick={() => setIsChooseLocationOpen(true)}
+            >
+              Izberi lokacijo
+            </button>
+            <button 
+              className="breadcrumb-btn btn-gps"
+              onClick={() => setIsGPSOpen(true)}
+            >
+              GPS
+            </button>
+          </div>
+        )}
       </nav>
 
       <AddWarden

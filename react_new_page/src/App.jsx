@@ -3,6 +3,7 @@ import Layout from "./layouts/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Settings from "./pages/Settings";
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       {/* Routes WITH sidebar */}
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/settings" element={<Settings />} />
         {/* later: dashboard, profile, settings, etc. */}
       </Route>
 
