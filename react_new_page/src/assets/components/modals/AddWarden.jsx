@@ -63,13 +63,17 @@ const AddWarden = ({ isOpen, onClose, onSubmit }) => {
 
           {/* FOOTER */}
           <div className="modal-footer">
-            <button className="btn btn-danger" onClick={onClose}>
+            <button type="button" className="btn btn-danger" onClick={onClose}>
               Prekliči
             </button>
             <button
+              type="button"
               className="btn btn-primary"
               id="addButtonRedar"
-              onClick={onSubmit}
+              onClick={(e) => {
+                e.preventDefault();
+                onSubmit();
+              }}
             >
               Prijavi
             </button>
