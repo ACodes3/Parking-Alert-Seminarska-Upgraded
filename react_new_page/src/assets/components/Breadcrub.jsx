@@ -2,10 +2,12 @@ import { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../styles/additional-styles/breadcrumb.css";
 import AddWarden from "./modals/AddWarden";
+import ChooseLocationModal from "./modals/ChooseLoactionModal";
 
 const Breadcrub = () => {
   const location = useLocation();
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
+  const [isChooseLocationOpen, setIsChooseLocationOpen] = useState(false);
 
   const breadcrumbs = useMemo(() => {
     const paths = location.pathname.split("/").filter(Boolean);
@@ -39,6 +41,12 @@ const Breadcrub = () => {
     setIsAddWardenOpen(false);
   };
 
+  const handleChooseLocationConfirm = (location) => {
+    // Handle location selection here
+    console.log("Izbrana lokacija:", location);
+    setIsChooseLocationOpen(false);
+  };
+
   return (
     <>
       <nav aria-label="Breadcrumb navigation" className="breadcrumb-nav">
@@ -70,7 +78,12 @@ const Breadcrub = () => {
           >
             Prijavi redarja
           </button>
-          <button className="breadcrumb-btn btn-location">Izberi lokacijo</button>
+          <button 
+            className="breadcrumb-btn btn-location"
+            onClick={() => setIsChooseLocationOpen(true)}
+          >
+            Izberi lokacijo
+          </button>
           <button className="breadcrumb-btn btn-gps">GPS</button>
         </div>
       </nav>
@@ -79,6 +92,12 @@ const Breadcrub = () => {
         isOpen={isAddWardenOpen}
         onClose={() => setIsAddWardenOpen(false)}
         onSubmit={handleAddWardenSubmit}
+      />
+
+      <ChooseLocationModal
+        isOpen={isChooseLocationOpen}
+        onClose={() => setIsChooseLocationOpen(false)}
+        onConfirm={handleChooseLocationConfirm}
       />
     </>
   );

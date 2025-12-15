@@ -1,0 +1,106 @@
+/* MODAL */
+.custom-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* MODAL TITLE STYLING */
+.modal-title {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* MODAL HEADER ALIGNMENT */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* CLOSE BUTTON STYLING */
+.close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: fit-content;
+}
+
+/* MODAL BODY TEXT */
+.modal-body {
+  color: #000;
+}
+
+/* DIALOG */
+.dropdown-dialog {
+  max-width: 700px;
+  height: auto;
+  max-height: 400px;
+}
+
+/* BODY */
+.modal-body-parking {
+  max-height: 250px;
+  height: auto;
+  overflow-y: visible;
+}
+
+/* DROPDOWN */
+.dropdown-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+.dropdown-container input.form-control {
+  appearance: none;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 20 20'><polygon points='0,0 20,0 10,10' fill='%23333'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.dropdown-parking {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-list li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdown-list li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-list li.selected {
+  background-color: #d1e7ff;
+  font-weight: bold;
+}
