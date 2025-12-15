@@ -148,6 +148,12 @@
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 768px) {
+  /* Avoid horizontal scroll and make content narrower */
+  .table-responsive { overflow-x: visible !important; padding: 8px; }
+  .table { table-layout: fixed; width: 100%; }
+  .table td { padding: 8px 10px; }
+  .table td p { white-space: normal; word-break: break-word; }
+
   .table tbody tr {
     display: block;
     padding: 10px 0;
@@ -167,4 +173,6 @@
   .driver-devider h3 {
     font-size: 13px;
   }
+
+  .armada-pic { width: 40px; height: 40px; }
 }

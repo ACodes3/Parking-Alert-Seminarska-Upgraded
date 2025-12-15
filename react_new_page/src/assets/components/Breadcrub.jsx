@@ -85,18 +85,21 @@ const Breadcrub = ({ showButtons = true }) => {
               className="breadcrumb-btn btn-report"
               onClick={() => setIsAddWardenOpen(true)}
             >
+              <i className="fa fa-exclamation-triangle"></i>
               Prijavi redarja
             </button>
             <button 
               className="breadcrumb-btn btn-location"
               onClick={() => setIsChooseLocationOpen(true)}
             >
+              <i className="fa fa-map-marker"></i>
               Izberi lokacijo
             </button>
             <button 
               className="breadcrumb-btn btn-gps"
               onClick={() => setIsGPSOpen(true)}
             >
+              <i className="fa fa-location-arrow"></i>
               GPS
             </button>
           </div>

@@ -48,7 +48,7 @@ const notificationSeed = [
   },
 ];
 
-const TopBar = () => {
+const TopBar = ({ onMenuClick }) => {
   const [newsIndex, setNewsIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
   const [userOpen, setUserOpen] = useState(false);
@@ -123,6 +123,8 @@ const TopBar = () => {
     [notifications]
   );
 
+  const isRedar = useMemo(() => (text) => /\bRedar\b/i.test(text), []);
+
   const markAllRead = () => {
     if (!unreadCount) return;
     setNotifications((curr) => curr.map((item) => ({ ...item, read: true })));
@@ -146,6 +148,9 @@ const TopBar = () => {
               className="navbar-toggle"
               data-toggle="collapse"
               aria-label="Toggle navigation"
+              aria-controls="skin-select"
+              aria-expanded={false}
+              onClick={onMenuClick}
             >
               <FiMenu />
             </button>
@@ -268,7 +273,11 @@ const TopBar = () => {
               >
                 {newsItems.map((item) => (
                   <li key={item} className="ticker-item">
-                    <span className="ticker-dot" aria-hidden="true" />
+                    {isRedar(item) ? (
+                      <span className="ticker-avatar" aria-hidden="true">R</span>
+                    ) : (
+                      <span className="ticker-dot" aria-hidden="true" />
+                    )}
                     <span className="ticker-text">{item}</span>
                   </li>
                 ))}

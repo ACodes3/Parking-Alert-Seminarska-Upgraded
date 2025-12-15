@@ -67,15 +67,17 @@
 
 .breadcrumb-btn {
   padding: 10px 20px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px; /* match profile .btn */
+  font-weight: 600; /* match profile .btn */
   border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  letter-spacing: 0.3px;
+  display: inline-flex; /* icons + text like profile */
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-report {
@@ -147,7 +149,7 @@
   }
 
   .breadcrumb-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 12px; /* compact on mobile */
   }
 }

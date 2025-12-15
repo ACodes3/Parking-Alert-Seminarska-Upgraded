@@ -1,10 +1,12 @@
 import { FiClock, FiHome, FiMap, FiSearch, FiSettings } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "../styles/additional-styles/sidebar.css";
+import "../styles/additional-styles/responsive.css";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen = false, onClose }) => {
   return (
-    <aside id="skin-select">
+    <>
+    <aside id="skin-select" className={isOpen ? "open" : ""}>
       {/* Logo */}
       <div
         id="logo"
@@ -151,6 +153,9 @@ const Sidebar = () => {
         </div>
       </div>
     </aside>
+    {/* overlay for mobile */}
+    <div className={`sidebar-overlay ${isOpen ? "show" : ""}`} onClick={onClose} aria-hidden={!isOpen} />
+    </>
   );
 };
 

@@ -3,7 +3,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 99999;
+  z-index: 100010; /* above topbar and side drawer */
   display: flex;
   justify-content: center;
   align-items: center;

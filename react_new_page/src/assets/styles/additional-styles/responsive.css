@@ -1,0 +1,176 @@
+/* Basic fluid layout */
+.app-root {
+  display: flex;
+}
+.content-root {
+  margin-left: 300px;
+  width: calc(100% - 300px);
+  min-height: 100vh;
+  background: #f6f8fb;
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  width: 100%;
+}
+
+/* Sidebar mobile drawer */
+#skin-select {
+  transition: transform 0.25s ease;
+}
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  z-index: 100002; /* above topbar (100000) and map controls */
+}
+.sidebar-overlay.show { display: block; }
+
+@media (max-width: 1024px) {
+  .content-root { background: #f6f8fb; }
+}
+
+@media (max-width: 768px) {
+  /* stack layout; hide sidebar off-canvas until opened */
+  .app-root { display: block; }
+  #skin-select {
+    display: block !important; /* override sidebar.css */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80%;
+    max-width: 320px;
+    transform: translateX(-100%);
+    z-index: 100003; /* above overlay and topbar */
+  }
+  #skin-select.open { transform: translateX(0); }
+  /* ensure inner content visible */
+  .side-bar { display: block !important; }
+
+  .content-root {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .navbar .navbar-toggle {
+    height: 44px;
+    width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+  }
+
+  /* topbar adjustments */
+  .topbar-row { gap: 8px; flex-wrap: wrap; }
+  /* Show and stack date/time + ticker vertically on mobile */
+  .running-text { 
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px; 
+    padding-top: 4px;
+    padding-bottom: 10px; /* add bottom padding so date/time isn't flush */ 
+    order: 3;           /* push below header/icons/user */
+    flex-basis: 100%;   /* full width on its own row */
+  }
+  /* Override inline flex on the element with id */
+  #nt-title-container {
+    order: 3 !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  .navbar-header, .left-icons { order: 1; }
+  .navbar-right {
+    order: 2;
+    flex: 0 0 100%;
+    width: 100%;
+    margin-left: 0 !important; /* override desktop push-right */
+    justify-content: flex-start;
+    padding-top: 4px;
+  }
+  /* Make ticker full-width and remove left margin */
+  .ticker-window { 
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+    height: 26px;              /* single row */
+    padding: 2px 8px;
+  }
+  .ticker-item { height: 22px; }
+  .ticker-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ticker-avatar { display: inline-flex; }
+  /* Let date/time compress nicely */
+  .date-time { 
+    width: 100%; 
+    align-items: flex-start; 
+    gap: 6px; 
+  }
+  .date-top li, .digital li { font-size: 12px; }
+  
+  /* Hide the news ticker entirely on phones */
+  #nt-title-container .ticker-window { display: none !important; }
+
+  /* ===== User/Notif dropdowns on mobile ===== */
+  /* Base dropdown: anchor to the right under trigger */
+  .navbar-nav > li .dropdown-menu {
+    right: 8px !important;
+    left: auto !important;
+    top: calc(100% + 6px) !important;
+    width: auto;
+    max-width: calc(100vw - 16px);
+  }
+  /* Notifications dropdown: can expand wider if needed */
+  .dropdown-notifications {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+  /* User dropdown: compact floating panel with scroll if tall */
+  .navbar .dropdown-menu.dropdown-setting {
+    min-width: 200px !important;
+    width: min(280px, calc(100vw - 16px)) !important;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  /* Compact user toggle: hide greeting text on phones */
+  .navbar-right .dropdown > a span { display: none; }
+  .navbar-right .admin-pic { margin-right: 0; }
+}
+
+/* Map and tables responsiveness */
+.map-container, .leaflet-container {
+  width: 100% !important;
+}
+@media (max-width: 768px) {
+  .map-container { height: 40vh !important; }
+}
+@media (min-width: 769px) {
+  .map-container { height: 60vh !important; }
+}
+
+/* Images */
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Typography scaling */
+body { font-size: clamp(14px, 2.5vw, 16px); }
+h1 { font-size: clamp(18px, 4vw, 28px); }
+
+/* Table stacking (opt-in via class) */
+.table-responsive { overflow-x: auto; }
+@media (max-width: 600px) {
+  .stack-table table, .stack-table thead, .stack-table tbody, .stack-table th, .stack-table td, .stack-table tr {
+    display: block;
+  }
+  .stack-table thead { display: none; }
+  .stack-table tr { margin-bottom: 12px; background: #fff; padding: 8px; border-radius: 8px; }
+  .stack-table td { border: none; position: relative; padding-left: 40%; }
+  .stack-table td::before { content: attr(data-label); position: absolute; left: 8px; top: 8px; font-weight: 600; }
+}

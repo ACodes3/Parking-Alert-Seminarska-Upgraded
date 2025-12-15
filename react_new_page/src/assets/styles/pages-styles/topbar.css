@@ -349,6 +349,21 @@
   box-shadow: 0 0 0 3px rgba(100, 197, 219, 0.15);
 }
 
+/* Hidden by default to keep desktop unchanged; enabled on mobile */
+.ticker-avatar {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444; /* red */
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
 .ticker-window:before,
 .ticker-window:after {
   content: "";
