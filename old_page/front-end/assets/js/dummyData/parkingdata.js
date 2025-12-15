@@ -1,0 +1,62 @@
+// cleanParking.js
+export const parkirnaMesta = [
+  { ime: "Parkirna hiša Tivoli", latitude: 46.0512, longitude: 14.5051 },
+  { ime: "Parkirna hiša Linhartova", latitude: 46.067, longitude: 14.515 },
+  {
+    ime: "Parkirna hiša Sanatorij Emona",
+    latitude: 46.0485,
+    longitude: 14.5002,
+  },
+  {
+    ime: "Parkirno mesto Petkovskovo Nabrežje",
+    latitude: 46.05196,
+    longitude: 14.50806,
+  },
+  { ime: "Parkirno mesto NUK", latitude: 46.0478, longitude: 14.5053 },
+  { ime: "Parkirno mesto Kongresni trg", latitude: 46.0495, longitude: 14.504 },
+  {
+    ime: "Parkirno mesto Trg Republike",
+    latitude: 46.0502,
+    longitude: 14.5018,
+  },
+  {
+    ime: "Parkirno mesto Trg Osvobodilne fronte",
+    latitude: 46.05775,
+    longitude: 14.51244,
+  },
+  {
+    ime: "Parkirno mesto Trg Francoske revolucije",
+    latitude: 46.0475,
+    longitude: 14.5,
+  },
+  {
+    ime: "Parkirno mesto Trg Prešernovega trga",
+    latitude: 46.051,
+    longitude: 14.506,
+  },
+  { ime: "Parkirno mesto Trg Črnuče", latitude: 46.103, longitude: 14.54 },
+  { ime: "Parkirno mesto Trg Ajševica", latitude: 46.0432, longitude: 14.4701 },
+  { ime: "Parkirno mesto Trg Barje", latitude: 46.0155, longitude: 14.487 },
+  { ime: "Parkirno mesto Trg Šiška", latitude: 46.072, longitude: 14.489 },
+  { ime: "Parkirno mesto Trg Moste", latitude: 46.0565, longitude: 14.5389 },
+  { ime: "Parkirno mesto Trg Bežigrad", latitude: 46.0742, longitude: 14.5215 },
+  { ime: "Parkirno mesto Trg Vič", latitude: 46.0338, longitude: 14.4829 },
+  { ime: "Parkirno mesto Trg Rudnik", latitude: 46.0202, longitude: 14.5233 },
+  { ime: "Parkirno mesto Trg Jarše", latitude: 46.0689, longitude: 14.5522 },
+  {
+    ime: "Parkirno mesto Trg Črnuče II",
+    latitude: 46.1052,
+    longitude: 14.5366,
+  },
+  // Novo dodani
+  { ime: "Parkirno mesto Brdo", latitude: 46.0497, longitude: 14.4582 },
+  { ime: "Parkirno mesto Stožice", latitude: 46.0801, longitude: 14.5268 },
+  { ime: "Parkirno mesto Zalog", latitude: 46.0613, longitude: 14.5742 },
+  { ime: "Parkirno mesto Rakova Jelša", latitude: 46.0265, longitude: 14.5114 },
+  { ime: "Parkirno mesto Polje", latitude: 46.0567, longitude: 14.5843 },
+  { ime: "Parkirno mesto Rožna dolina", latitude: 46.0426, longitude: 14.479 },
+  { ime: "Parkirno mesto Murgle", latitude: 46.0299, longitude: 14.4942 },
+  { ime: "Parkirno mesto Ježica", latitude: 46.0938, longitude: 14.5077 },
+  { ime: "Parkirno mesto BTC City", latitude: 46.065, longitude: 14.546 },
+  { ime: "Parkirno mesto Žale", latitude: 46.0712, longitude: 14.5203 },
+];

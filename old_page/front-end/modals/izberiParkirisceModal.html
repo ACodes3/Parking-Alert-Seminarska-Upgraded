@@ -1,0 +1,145 @@
+<div class="modal" id="izberiParkirisceModal" style="display: none">
+  <div class="modal-dialog dropdown-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Izberi Lokacijo</h5>
+        <button type="button" class="close" onclick="closeModal()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body modal-body-parking">
+        Prosim izberite lokacijo iz spodnjega seznama:
+        <div class="dropdown-container mt-3">
+          <input
+            type="text"
+            id="searchParking"
+            placeholder="Iskanje parkirišča..."
+            class="form-control"
+            oninput="filterParkingList()"
+            onfocus="showDropdown()"
+          />
+          <div class="dropdown-parking">
+            <ul id="parkingList" class="dropdown-list">
+              <li onclick="selectParkingByName('Parkirna hiša Tivoli')">Parkirna hiša Tivoli</li>
+              <li onclick="selectParkingByName('Parkirna hiša Linhartova')">Parkirna hiša Linhartova</li>
+              <li onclick="selectParkingByName('Parkirna hiša Sanatorij Emona')">Parkirna hiša Sanatorij Emona</li>
+              <li onclick="selectParkingByName('Parkirno mesto Petkovskovo Nabrežje')">Parkirno mesto Petkovskovo Nabrežje</li>
+              <li onclick="selectParkingByName('Parkirno mesto NUK')">Parkirno mesto NUK</li>
+              <li onclick="selectParkingByName('Parkirno mesto Kongresni trg')">Parkirno mesto Kongresni trg</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Republike')">Parkirno mesto Trg Republike</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Osvobodilne fronte')">Parkirno mesto Trg Osvobodilne fronte</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Francoske revolucije')">Parkirno mesto Trg Francoske revolucije</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Prešernovega trga')">Parkirno mesto Trg Prešernovega trga</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Črnuče')">Parkirno mesto Trg Črnuče</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Ajševica')">Parkirno mesto Trg Ajševica</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Barje')">Parkirno mesto Trg Barje</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Šiška')">Parkirno mesto Trg Šiška</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Moste')">Parkirno mesto Trg Moste</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Bežigrad')">Parkirno mesto Trg Bežigrad</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Vič')">Parkirno mesto Trg Vič</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Rudnik')">Parkirno mesto Trg Rudnik</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Jarše')">Parkirno mesto Trg Jarše</li>
+              <li onclick="selectParkingByName('Parkirno mesto Trg Črnuče II')">Parkirno mesto Trg Črnuče II</li>
+              <li onclick="selectParkingByName('Parkirno mesto Brdo')">Parkirno mesto Brdo</li>
+              <li onclick="selectParkingByName('Parkirno mesto Stožice')">Parkirno mesto Stožice</li>
+              <li onclick="selectParkingByName('Parkirno mesto Zalog')">Parkirno mesto Zalog</li>
+              <li onclick="selectParkingByName('Parkirno mesto Rakova Jelša')">Parkirno mesto Rakova Jelša</li>
+              <li onclick="selectParkingByName('Parkirno mesto Polje')">Parkirno mesto Polje</li>
+              <li onclick="selectParkingByName('Parkirno mesto Rožna dolina')">Parkirno mesto Rožna dolina</li>
+              <li onclick="selectParkingByName('Parkirno mesto Murgle')">Parkirno mesto Murgle</li>
+              <li onclick="selectParkingByName('Parkirno mesto Ježica')">Parkirno mesto Ježica</li>
+              <li onclick="selectParkingByName('Parkirno mesto BTC City')">Parkirno mesto BTC City</li>
+              <li onclick="selectParkingByName('Parkirno mesto Žale')">Parkirno mesto Žale</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="closeModal()">Prekliči</button>
+        <button class="btn btn-primary" onclick="confirmSelectedParking()">
+          Izberi
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Stil Modala */
+  .dropdown-dialog {
+    max-width: 700px;
+    height: 500px;
+  }
+
+  .modal-body-parking {
+    max-height: 600px;
+    height: 500px;
+    overflow-y: auto;
+  }
+
+  .dropdown-container {
+    position: relative;
+    margin-top: 20px;
+  }
+  .dropdown-container input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+  /* Dropdown */
+  .dropdown-parking {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: none;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 100;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: max-height 0.3s ease-in-out;
+  }
+
+  .dropdown-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .dropdown-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .dropdown-list li:hover {
+    background-color: #f1f1f1;
+  }
+
+  input.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+  }
+
+  input.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  .dropdown-list li.selected {
+    background-color: #d1e7ff;
+    font-weight: bold;
+  }
+</style>
+
+<script src="/front-end/assets/js/toast/toast.js"></script>
+<!-- Skripta Funkcij-->
+<script src="/front-end/assets/js/funtionsScript.js"></script>
