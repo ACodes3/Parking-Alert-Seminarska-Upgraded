@@ -55,13 +55,21 @@
 /* Notification bubble */
 .noft-red {
   position: absolute;
-  top: 15px;
-  right: 10px;
+  top: 2px;
+  right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
   background: #f44336;
   color: #fff;
   font-size: 10px;
-  padding: 2px 6px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
   border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(48, 65, 96, 0.95);
 }
 
 /* =========================
