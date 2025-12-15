@@ -1,0 +1,85 @@
+/* MODAL OVERLAY */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* MODAL TITLE STYLING */
+.modal-title {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* MODAL HEADER ALIGNMENT */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* CLOSE BUTTON STYLING */
+.close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: fit-content;
+}
+
+/* LABEL STYLING */
+label {
+  color: #000;
+}
+
+/* SELECT STYLING */
+select#lokacija,
+select.redar-premika {
+  appearance: none;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 20 20'><polygon points='0,0 20,0 10,10' fill='%23333'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+select#lokacija:focus,
+select.redar-premika:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px #007bff;
+  outline: none;
+}
+
+textarea.redar-premika-opomba {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}

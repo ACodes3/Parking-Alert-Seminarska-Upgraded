@@ -1,11 +1,15 @@
 /* Breadcrumb Navigation Styles */
 
 .breadcrumb-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px 20px;
   background-color: #f6f8fb;
   border-bottom: 1px solid #e9ecef;
   margin-bottom: 20px;
   border-radius: 4px 4px 0 0;
+  gap: 20px;
 }
 
 .breadcrumb-list {
@@ -54,10 +58,79 @@
   user-select: none;
 }
 
+/* Breadcrumb Action Buttons */
+.breadcrumb-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.breadcrumb-btn {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  letter-spacing: 0.3px;
+}
+
+.btn-report {
+  background: linear-gradient(135deg, #5a7a8f 0%, #4a6a7f 100%);
+  color: white;
+  border-color: #4a6a7f;
+}
+
+.btn-report:hover {
+  background: linear-gradient(135deg, #4a6a7f 0%, #3a5a6f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(90, 122, 143, 0.3);
+}
+
+.btn-location {
+  background: linear-gradient(135deg, #2b7a9b 0%, #1b6a8b 100%);
+  color: white;
+  border-color: #1b6a8b;
+}
+
+.btn-location:hover {
+  background: linear-gradient(135deg, #1b6a8b 0%, #0b5a7b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(43, 122, 155, 0.3);
+}
+
+.btn-gps {
+  background: linear-gradient(135deg, #3a8a9f 0%, #2a7a8f 100%);
+  color: white;
+  border-color: #2a7a8f;
+}
+
+.btn-gps:hover {
+  background: linear-gradient(135deg, #2a7a8f 0%, #1a6a7f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(58, 138, 159, 0.3);
+}
+
+.breadcrumb-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.breadcrumb-btn:focus {
+  outline: 2px solid #2b7a9b;
+  outline-offset: 2px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .breadcrumb-nav {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 10px 15px;
+    gap: 15px;
   }
 
   .breadcrumb-list {
@@ -66,5 +139,15 @@
 
   .breadcrumb-separator {
     margin: 0 3px;
+  }
+
+  .breadcrumb-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .breadcrumb-btn {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
