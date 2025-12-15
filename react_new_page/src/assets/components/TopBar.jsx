@@ -21,11 +21,41 @@ const newsItems = [
   "Obvestilo: Zapora pri Linhartovi",
 ];
 
+const notificationSeed = [
+  {
+    id: 1,
+    title: "Redar v bližini",
+    preview: "Ulica Sončnega Bulevarda, preverite vozilo.",
+    time: "pred 3 min",
+    type: "warning",
+    read: false,
+  },
+  {
+    id: 2,
+    title: "Novi podatki o parkirišču",
+    preview: "Tivoli: na voljo 12 prostih mest.",
+    time: "pred 15 min",
+    type: "info",
+    read: false,
+  },
+  {
+    id: 3,
+    title: "Potrjeno opozorilo",
+    preview: "Vaša prijava je obdelana. Hvala!",
+    time: "pred 1 h",
+    type: "success",
+    read: true,
+  },
+];
+
 const TopBar = () => {
   const [newsIndex, setNewsIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
   const [userOpen, setUserOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifications, setNotifications] = useState(notificationSeed);
   const userMenuRef = useRef(null);
+  const notifMenuRef = useRef(null);
 
   // Move the list by a single item height instead of the full list height
   const tickerTransform = useMemo(() => {
@@ -54,9 +84,15 @@ const TopBar = () => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
         setUserOpen(false);
       }
+      if (notifMenuRef.current && !notifMenuRef.current.contains(e.target)) {
+        setNotifOpen(false);
+      }
     }
     function handleKeydown(e) {
-      if (e.key === "Escape") setUserOpen(false);
+      if (e.key === "Escape") {
+        setUserOpen(false);
+        setNotifOpen(false);
+      }
     }
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleKeydown);
@@ -82,6 +118,23 @@ const TopBar = () => {
     [now]
   );
 
+  const unreadCount = useMemo(
+    () => notifications.filter((item) => !item.read).length,
+    [notifications]
+  );
+
+  const markAllRead = () => {
+    if (!unreadCount) return;
+    setNotifications((curr) => curr.map((item) => ({ ...item, read: true })));
+  };
+
+  const markOneRead = (id) => {
+    setNotifications((curr) =>
+      curr.map((item) => (item.id === id ? { ...item, read: true } : item))
+    );
+    setNotifOpen(false);
+  };
+
   return (
     <nav role="navigation" className="navbar navbar-static-top">
       <div className="container-fluid">
@@ -106,15 +159,76 @@ const TopBar = () => {
 
           {/* Left icons */}
           <ul className="nav navbar-nav left-icons">
-            <li className="dropdown">
-              <a href="#" aria-label="Notifications">
+            <li
+              ref={notifMenuRef}
+              className={`dropdown topbar-dropdown ${notifOpen ? "open" : ""}`}
+            >
+              <a
+                href="#"
+                aria-label="Notifications"
+                className="dropdown-toggle"
+                aria-haspopup="true"
+                aria-expanded={notifOpen}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNotifOpen((v) => !v);
+                  setUserOpen(false);
+                }}
+              >
                 <FiBell style={{ fontSize: "20px" }} />
-                <div className="noft-red">5</div>
+                {unreadCount > 0 && (
+                  <div className="noft-red">{unreadCount}</div>
+                )}
               </a>
+
+              <ul className="dropdown-menu dropdown-notifications">
+                <li className="notif-header">
+                  <div>
+                    <p className="notif-title">Obvestila</p>
+                    <p className="notif-subtitle">
+                      {unreadCount} neprebranih · skupaj {notifications.length}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="notif-action"
+                    onClick={markAllRead}
+                    disabled={!unreadCount}
+                  >
+                    Označi vse
+                  </button>
+                </li>
+
+                <li className="notif-list">
+                  {notifications.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`notif-item ${item.read ? "is-read" : "is-unread"}`}
+                      onClick={() => markOneRead(item.id)}
+                    >
+                      <div className={`notif-dot type-${item.type}`} aria-hidden="true" />
+                      <div className="notif-content">
+                        <div className="notif-row">
+                          <span className="notif-item-title">{item.title}</span>
+                          <span className="notif-time">{item.time}</span>
+                        </div>
+                        <p className="notif-preview">{item.preview}</p>
+                      </div>
+                    </button>
+                  ))}
+                </li>
+
+                <li className="notif-footer">
+                  <Link to="/help" onClick={() => setNotifOpen(false)}>
+                    <FiHelpCircle /> Center za pomoč
+                  </Link>
+                </li>
+              </ul>
             </li>
 
             <li>
-              <a href="#" aria-label="Help">
+              <a href="/help" aria-label="Help">
                 <FiHelpCircle style={{ fontSize: "20px" }} />
               </a>
             </li>
