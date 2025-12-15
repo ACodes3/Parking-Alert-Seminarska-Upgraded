@@ -31,7 +31,7 @@ const SignUp = () => {
           <div className="col-md-4 col-md-offset-4">
             <div id="logo-login">
               <h1>
-                Parking Alert <span>v1.1</span>
+                Parking Alert <span>v 2.1</span>
               </h1>
             </div>
           </div>
@@ -139,7 +139,7 @@ const SignUp = () => {
                 >
                   <label>Ali imate že račun?</label>
                   <Link
-                    to="/"
+                    to="/login"
                     className="btn btn-primary btn-block"
                   >
                     Prijavi se
@@ -154,7 +154,7 @@ const SignUp = () => {
       {/* Footer */}
       <div style={{ textAlign: "center", margin: "0 auto" }}>
         <h6 style={{ color: "#fff" }}>
-          Parking Alert v 1.1. TPO projekt
+          Parking Alert v 2.1. TPO projekt
         </h6>
       </div>
 

@@ -198,6 +198,16 @@ body {
     padding:0 10px;
 }
 
+.account-box .btn {
+    text-align: left;
+    padding-left: 20px !important;
+}
+
+.account-box .btn-primary {
+    text-align: center;
+    padding-left: 12px !important;
+}
+
 .account-box .btn:hover {
     color: #fff;
 }

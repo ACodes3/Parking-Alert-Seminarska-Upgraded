@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaFacebookF, FaGooglePlusG, FaInstagram, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import "../assets/styles/pages-styles/login.css";
 
 const Login = () => {
@@ -149,12 +150,12 @@ const Login = () => {
               {/* Create Account */}
               <div className="row">
                 <div className="col-md-12 row-block">
-                  <a
-                    href="/old_page/front-end/ustvariRacun.html"
+                  <Link
+                    to="/sign-up"
                     className="btn btn-primary btn-block"
                   >
                     Ustvari novi račun
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
