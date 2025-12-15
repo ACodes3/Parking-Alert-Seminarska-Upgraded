@@ -1,0 +1,298 @@
+/* =========================
+   TOPBAR / NAVBAR
+========================= */
+
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+  background: rgba(48, 65, 96, 0.95);
+  border: none;
+  min-height: 60px;
+  z-index: 1000;
+}
+
+.navbar .container-fluid {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* =========================
+   MOBILE LOGO
+========================= */
+
+#logo-mobile h1 {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 300;
+  margin: 10px 0;
+  text-transform: uppercase;
+}
+
+#logo-mobile h1 span {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  font-size: 11px;
+  padding: 2px 5px;
+  margin-left: 5px;
+}
+
+/* =========================
+   LEFT ICONS
+========================= */
+
+.navbar-nav > li > a {
+  color: #ffffff;
+  padding: 20px 15px;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  background: transparent;
+  color: #00aced;
+}
+
+/* Notification bubble */
+.noft-red {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  background: #f44336;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+/* =========================
+   CENTER RUNNING TEXT
+========================= */
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 6px 8px;
+  width: 100%;
+}
+
+.running-text {
+  color: #ffffff;
+  padding-top: 0;
+}
+
+.date-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.date-top,
+.digital {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.date-top li,
+.digital li {
+  font-size: 12px;
+  color: #d1d5db;
+}
+
+#nt-title {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#nt-title li {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+#nt-title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.left-icons,
+.navbar-right {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  float: none !important;
+}
+
+.navbar-header,
+.left-icons,
+.navbar-right {
+  flex-shrink: 0;
+}
+
+.navbar-right {
+  margin-left: auto;
+}
+
+.navbar-nav > li {
+  position: relative;
+}
+
+.ticker-window {
+  height: 32px;
+  overflow: hidden;
+  position: relative;
+  max-width: 500px;
+  flex: 2;
+  padding: 4px 10px;
+  margin-left: 20px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.ticker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.ticker-item {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  color: #f8fafc;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.ticker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #64c5db, #7bdcb5);
+  box-shadow: 0 0 0 3px rgba(100, 197, 219, 0.15);
+}
+
+.ticker-window:before,
+.ticker-window:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  pointer-events: none;
+}
+
+.ticker-window:before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(48, 65, 96, 0.95), transparent);
+}
+
+.ticker-window:after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(48, 65, 96, 0.95), transparent);
+}
+
+/* Layout tweaks */
+.navbar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.navbar-nav {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav > li > a {
+  padding: 16px 12px;
+}
+
+/* =========================
+   USER DROPDOWN
+========================= */
+
+.admin-pic {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.navbar-nav.navbar-right > li > a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Dropdown menu */
+.dropdown-setting {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 5px 0;
+  min-width: 180px;
+}
+
+.dropdown-setting li a {
+  padding: 10px 15px;
+  color: #333333;
+  font-size: 13px;
+  display: block;
+}
+
+.dropdown-setting li a:hover {
+  background: #f1f5f9;
+  color: #00aced;
+}
+
+.dropdown-setting .divider {
+  margin: 5px 0;
+}
+
+/* =========================
+   MOBILE TOGGLE
+========================= */
+
+.navbar-toggle {
+  margin-top: 12px;
+  border: none;
+  background: transparent;
+}
+
+.navbar-toggle .entypo-menu {
+  font-size: 20px;
+  color: #ffffff;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 767px) {
+  .running-text {
+    display: none;
+  }
+}

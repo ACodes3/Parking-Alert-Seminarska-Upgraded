@@ -1,8 +1,196 @@
+import { useEffect, useMemo, useState } from "react";
+import {
+  FiBell,
+  FiCalendar,
+  FiClock,
+  FiHelpCircle,
+  FiLifeBuoy,
+  FiLogOut,
+  FiMenu,
+  FiSettings,
+  FiUser,
+} from "react-icons/fi";
+import { Link } from "react-router-dom";
+import "../styles/pages-styles/topbar.css";
+
+const newsItems = [
+  "Redar na Ulici Sončnega Bulevarda",
+  "Redar na Ulici Javorja",
+  "Redar na Ulici Hrasta",
+  "Gneča pri Parkirišču Tivoli",
+  "Obvestilo: Zapora pri Linhartovi",
+];
 
 const TopBar = () => {
-  return (
-    <div>TopBar</div>
-  )
-}
+  const [newsIndex, setNewsIndex] = useState(0);
+  const [now, setNow] = useState(() => new Date());
 
-export default TopBar
+  // Move the list by a single item height instead of the full list height
+  const tickerTransform = useMemo(() => {
+    if (!newsItems.length) return "translateY(0)";
+
+    const offsetPercent = 100 / newsItems.length;
+    return `translateY(-${newsIndex * offsetPercent}%)`;
+  }, [newsIndex]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNewsIndex((current) => (current + 1) % newsItems.length);
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const dateLabel = useMemo(
+    () =>
+      now.toLocaleDateString("sl-SI", {
+        weekday: "long",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }),
+    [now]
+  );
+
+  const [hours = "00", minutes = "00", seconds = "00"] = useMemo(
+    () => now.toLocaleTimeString("sl-SI", { hour12: false }).split(":"),
+    [now]
+  );
+
+  return (
+    <nav role="navigation" className="navbar navbar-static-top">
+      <div className="container-fluid">
+        <div className="topbar-row">
+          {/* Mobile toggle + logo */}
+          <div className="navbar-header">
+            <button
+              type="button"
+              className="navbar-toggle"
+              data-toggle="collapse"
+              aria-label="Toggle navigation"
+            >
+              <FiMenu />
+            </button>
+
+            <div id="logo-mobile" className="visible-xs">
+              <h1>
+                Parking Alert <span>v1.1</span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Left icons */}
+          <ul className="nav navbar-nav left-icons">
+            <li className="dropdown">
+              <a href="#" aria-label="Notifications">
+                <FiBell style={{ fontSize: "20px" }} />
+                <div className="noft-red">5</div>
+              </a>
+            </li>
+
+            <li>
+              <a href="#" aria-label="Help">
+                <FiHelpCircle style={{ fontSize: "20px" }} />
+              </a>
+            </li>
+          </ul>
+
+          {/* Center running text / clock */}
+          <div
+            id="nt-title-container"
+            className="navbar-left running-text"
+            style={{ flex: 1, minWidth: 0 }}
+          >
+            <div className="date-time">
+              <ul className="date-top">
+                <li>
+                  <FiCalendar />
+                </li>
+                <li>{dateLabel}</li>
+              </ul>
+
+              <ul className="digital">
+                <li>
+                  <FiClock />
+                </li>
+                <li>{hours}</li>
+                <li>:</li>
+                <li>{minutes}</li>
+                <li>:</li>
+                <li>{seconds}</li>
+              </ul>
+            </div>
+
+            <div className="ticker-window" aria-live="polite">
+              <ul
+                id="nt-title"
+                className="ticker-list"
+                style={{ transform: tickerTransform }}
+              >
+                {newsItems.map((item) => (
+                  <li key={item} className="ticker-item">
+                    <span className="ticker-dot" aria-hidden="true" />
+                    <span className="ticker-text">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* User dropdown */}
+          <ul className="nav navbar-nav navbar-right">
+            <li className="dropdown">
+              <a href="#" className="dropdown-toggle">
+                <img
+                  src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
+                  alt="User"
+                  className="admin-pic img-circle"
+                />
+                Živjo! <span>Uporabnik</span>
+                <b className="caret"></b>
+              </a>
+
+              <ul
+                className="dropdown-menu dropdown-setting"
+                style={{ marginTop: "14px" }}
+              >
+                <li>
+                  <Link to="/profile">
+                    <FiUser />
+                    &nbsp;&nbsp;Moj profil
+                  </Link>
+                </li>
+                <li>
+                  <a href="#">
+                    <FiSettings />
+                    &nbsp;&nbsp;Nastavitve
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <FiLifeBuoy />
+                    &nbsp;&nbsp;Pomoč
+                  </a>
+                </li>
+                <li className="divider"></li>
+                <li>
+                  <a href="#">
+                    <FiLogOut />
+                    &nbsp;&nbsp;Odjava
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default TopBar;
