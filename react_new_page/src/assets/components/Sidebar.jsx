@@ -18,14 +18,32 @@ const Sidebar = () => {
       >
         <h1
           style={{
-            fontSize: "x-large",
+            fontFamily: "'Open Sans', Arial, sans-serif",
+            fontSize: "27px",
+            fontWeight: "200",
+            letterSpacing: "-1px",
+            textTransform: "uppercase",
             display: "flex",
             alignItems: "center",
             color: "white",
             gap: "10px",
+            margin: 0,
+            marginTop: "5px",
           }}
         >
-          Parking Alert <span>v2.1</span>
+          Parking Alert{" "}
+          <span
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              borderRadius: "3px",
+              fontSize: "11px",
+              padding: "0 5px",
+              position: "relative",
+              top: "-3px",
+            }}
+          >
+             v 2 .1
+          </span>
         </h1>
       </div>
 
