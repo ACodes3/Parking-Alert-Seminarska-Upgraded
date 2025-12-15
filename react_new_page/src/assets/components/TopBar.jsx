@@ -201,7 +201,7 @@ const TopBar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="/help">
                     <FiLifeBuoy />
                     &nbsp;&nbsp;Pomoč
                   </a>

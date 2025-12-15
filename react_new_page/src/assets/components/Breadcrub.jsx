@@ -28,6 +28,7 @@ const Breadcrub = ({ showButtons = true }) => {
         "settings": "Nastavitve",
         "search": "Iskanje",
         "parking": "Parkiriščа",
+        "help": "Pomoč",
       };
       
       const label = labels[path] || path.charAt(0).toUpperCase() + path.slice(1);
