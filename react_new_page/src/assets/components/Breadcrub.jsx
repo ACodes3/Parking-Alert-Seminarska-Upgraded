@@ -3,11 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import "../styles/additional-styles/breadcrumb.css";
 import AddWarden from "./modals/AddWarden";
 import ChooseLocationModal from "./modals/ChooseLoactionModal";
+import GPSModal from "./modals/GPSModal";
 
 const Breadcrub = () => {
   const location = useLocation();
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
   const [isChooseLocationOpen, setIsChooseLocationOpen] = useState(false);
+  const [isGPSOpen, setIsGPSOpen] = useState(false);
 
   const breadcrumbs = useMemo(() => {
     const paths = location.pathname.split("/").filter(Boolean);
@@ -47,6 +49,11 @@ const Breadcrub = () => {
     setIsChooseLocationOpen(false);
   };
 
+  const handleGPSToggle = (enabled) => {
+    // Handle GPS toggle here
+    console.log("GPS:", enabled ? "vklopljen" : "izklopljen");
+  };
+
   return (
     <>
       <nav aria-label="Breadcrumb navigation" className="breadcrumb-nav">
@@ -84,7 +91,12 @@ const Breadcrub = () => {
           >
             Izberi lokacijo
           </button>
-          <button className="breadcrumb-btn btn-gps">GPS</button>
+          <button 
+            className="breadcrumb-btn btn-gps"
+            onClick={() => setIsGPSOpen(true)}
+          >
+            GPS
+          </button>
         </div>
       </nav>
 
@@ -98,6 +110,12 @@ const Breadcrub = () => {
         isOpen={isChooseLocationOpen}
         onClose={() => setIsChooseLocationOpen(false)}
         onConfirm={handleChooseLocationConfirm}
+      />
+
+      <GPSModal
+        isOpen={isGPSOpen}
+        onClose={() => setIsGPSOpen(false)}
+        onToggle={handleGPSToggle}
       />
     </>
   );
