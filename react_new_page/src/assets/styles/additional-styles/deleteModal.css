@@ -1,0 +1,119 @@
+/* MODAL OVERLAY */
+.custom-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* DIALOG */
+.confirm-dialog {
+  max-width: 520px;
+}
+
+/* CARD */
+.delete-modal {
+  border-radius: 12px;
+  border-top: 5px solid #dc3545;
+  box-shadow: 0 14px 45px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER */
+.delete-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: none;
+  padding: 1.25rem 1.25rem 0.5rem;
+}
+
+.delete-modal .close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  opacity: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* BODY */
+.delete-modal .modal-body {
+  padding: 0.75rem 1.25rem 1.5rem;
+  color: #000;
+}
+
+.delete-warning {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.warning-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(220, 53, 69, 0.12);
+  color: #dc3545;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.warning-title {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.warning-subtext {
+  margin: 0;
+  color: #4a5568;
+}
+
+/* FOOTER */
+.delete-modal .modal-footer {
+  padding: 0 1.25rem 1.25rem;
+  border-top: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.delete-modal .btn-secondary {
+  background-color: #f5f7fa;
+  color: #000;
+  border: 1px solid #d3d8de;
+}
+
+.delete-modal .btn-secondary:hover {
+  background-color: #e6eaef;
+  color: #000 !important;
+  border-color: #c3c9d1;
+}
+
+@media (max-width: 576px) {
+  .confirm-dialog {
+    margin: 0 12px;
+  }
+
+  .delete-modal .modal-body {
+    padding: 0.75rem 1rem 1.25rem;
+  }
+
+  .delete-modal .modal-footer {
+    padding: 0 1rem 1rem;
+  }
+}

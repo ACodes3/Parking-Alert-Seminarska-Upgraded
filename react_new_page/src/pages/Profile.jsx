@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Breadcrub from "../assets/components/Breadcrub";
 import AddWarden from "../assets/components/modals/AddWarden";
+import DeleteModal from "../assets/components/modals/DeleteModal";
 import "../assets/styles/pages-styles/profile.css";
 
 const Profile = () => {
@@ -17,6 +18,7 @@ const Profile = () => {
   const [formData, setFormData] = useState(user);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const handleEditAll = () => {
     if (editingField === "all") {
@@ -85,6 +87,11 @@ const Profile = () => {
     setIsAddWardenOpen(false);
   };
 
+  const handleDeleteConfirm = () => {
+    console.log("Uporabniški račun izbrisan");
+    setIsDeleteOpen(false);
+  };
+
   return (
     <div className="wrap-fluid">
       <div className="container-fluid paper-wrap bevel tlbr">
@@ -120,7 +127,11 @@ const Profile = () => {
               >
                 <i className="fa fa-exclamation-triangle"></i> Prijavi redarja
               </button>
-              <button className="btn btn-action btn-delete" type="button">
+              <button
+                className="btn btn-action btn-delete"
+                type="button"
+                onClick={() => setIsDeleteOpen(true)}
+              >
                 <i className="fa fa-trash"></i> Izbriši profil
               </button>
             </div>
@@ -380,6 +391,11 @@ const Profile = () => {
         isOpen={isAddWardenOpen}
         onClose={() => setIsAddWardenOpen(false)}
         onSubmit={handleAddWardenSubmit}
+      />
+      <DeleteModal
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDeleteConfirm}
       />
     </div>
   );

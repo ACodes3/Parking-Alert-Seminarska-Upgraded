@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Breadcrub from "../assets/components/Breadcrub";
 import GPSModal from "../assets/components/modals/GPSModal";
+import DeleteModal from "../assets/components/modals/DeleteModal";
 import CustomSelect from "../assets/components/CustomSelect";
 import "../assets/styles/pages-styles/settings.css";
 
@@ -11,6 +12,7 @@ const Settings = () => {
   const [language, setLanguage] = useState("sl-SI");
   const [gpsModalOpen, setGpsModalOpen] = useState(false);
   const [gpsEnabled, setGpsEnabled] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -35,6 +37,11 @@ const Settings = () => {
     setNotifyTraffic(true);
     setLanguage("sl-SI");
     setGpsEnabled(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    console.log("Uporabniški račun izbrisan");
+    setIsDeleteOpen(false);
   };
 
   return (
@@ -156,7 +163,9 @@ const Settings = () => {
                 <p>Trajno izbrišite vaš račun in vse podatke.</p>
               </div>
               <div className="card__body">
-                <button className="btn btn-danger">Izbriši račun</button>
+                <button className="btn btn-danger" onClick={() => setIsDeleteOpen(true)}>
+                  Izbriši račun
+                </button>
               </div>
             </div>
           </section>
@@ -166,6 +175,11 @@ const Settings = () => {
           isOpen={gpsModalOpen}
           onClose={() => setGpsModalOpen(false)}
           onToggle={(enabled) => setGpsEnabled(enabled)}
+        />
+        <DeleteModal
+          isOpen={isDeleteOpen}
+          onClose={() => setIsDeleteOpen(false)}
+          onConfirm={handleDeleteConfirm}
         />
       </div>
     </div>
