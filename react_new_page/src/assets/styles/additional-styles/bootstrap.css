@@ -3790,7 +3790,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
-  margin: 7.5px -15px;
+  margin: 7.5px -15px !important;
 }
 .navbar-nav > li > a {
   padding-top: 10px;
@@ -3819,7 +3819,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     background-image: none;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 740px) {
   .navbar-nav {
     float: left;
     margin: 0;

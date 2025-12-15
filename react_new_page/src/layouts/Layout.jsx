@@ -17,7 +17,7 @@ const Layout = () => {
         }}
       >
         <TopBar />
-        <main style={{ padding: "80px 24px 24px 24px" }}>
+        <main>
           <Outlet />
         </main>
       </div>
