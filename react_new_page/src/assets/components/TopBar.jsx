@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FiBell,
   FiCalendar,
@@ -24,6 +24,8 @@ const newsItems = [
 const TopBar = () => {
   const [newsIndex, setNewsIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
+  const [userOpen, setUserOpen] = useState(false);
+  const userMenuRef = useRef(null);
 
   // Move the list by a single item height instead of the full list height
   const tickerTransform = useMemo(() => {
@@ -44,6 +46,24 @@ const TopBar = () => {
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Close user dropdown on outside click or ESC
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserOpen(false);
+      }
+    }
+    function handleKeydown(e) {
+      if (e.key === "Escape") setUserOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeydown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeydown);
+    };
   }, []);
 
   const dateLabel = useMemo(
@@ -144,21 +164,30 @@ const TopBar = () => {
 
           {/* User dropdown */}
           <ul className="nav navbar-nav navbar-right">
-            <li className="dropdown">
-              <a href="#" className="dropdown-toggle">
+            <li
+              ref={userMenuRef}
+              className={`dropdown ${userOpen ? "open" : ""}`}
+            >
+              <a
+                href="#"
+                className="dropdown-toggle"
+                aria-haspopup="true"
+                aria-expanded={userOpen}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setUserOpen((v) => !v);
+                }}
+              >
                 <img
                   src="https://randomuser.me/api/portraits/thumb/men/75.jpg"
                   alt="User"
                   className="admin-pic img-circle"
                 />
-                Živjo! <span>Uporabnik</span>
+                Pozdravljeni, <span>Uporabnik</span>
                 <b className="caret"></b>
               </a>
 
-              <ul
-                className="dropdown-menu dropdown-setting"
-                style={{ marginTop: "14px" }}
-              >
+              <ul className="dropdown-menu dropdown-setting">
                 <li>
                   <Link to="/profile">
                     <FiUser />
@@ -166,10 +195,10 @@ const TopBar = () => {
                   </Link>
                 </li>
                 <li>
-                  <a href="#">
+                  <Link to="/settings">
                     <FiSettings />
                     &nbsp;&nbsp;Nastavitve
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a href="#">
@@ -177,7 +206,7 @@ const TopBar = () => {
                     &nbsp;&nbsp;Pomoč
                   </a>
                 </li>
-                <li className="divider"></li>
+                <li role="separator" className="divider"></li>
                 <li>
                   <a href="#">
                     <FiLogOut />
