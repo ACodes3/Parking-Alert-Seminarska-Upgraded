@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Breadcrub from "../assets/components/Breadcrub";
 import GPSModal from "../assets/components/modals/GPSModal";
+import CustomSelect from "../assets/components/CustomSelect";
 import "../assets/styles/pages-styles/settings.css";
 
 const Settings = () => {
@@ -107,16 +108,16 @@ const Settings = () => {
               </div>
               <div className="card__body">
                 <div className="field">
-                  <label htmlFor="language" className="field__label">Jezik</label>
-                  <select
+                  <CustomSelect
                     id="language"
-                    className="field__control"
+                    label="Jezik"
                     value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                  >
-                    <option value="sl-SI">Slovenščina</option>
-                    <option value="en-US">English</option>
-                  </select>
+                    onChange={setLanguage}
+                    options={[
+                      { value: "sl-SI", label: "Slovenščina" },
+                      { value: "en-US", label: "English" },
+                    ]}
+                  />
                 </div>
               </div>
             </div>
