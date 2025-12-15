@@ -1,5 +1,6 @@
 import Breadcrub from "../assets/components/Breadcrub";
 import MapComponent from "../assets/components/MapComponent";
+import HistoryTable from "../assets/components/HistoryTable";
 
 const Home = () => {
   return (
@@ -10,6 +11,8 @@ const Home = () => {
         
         {/* MAP SECTION */}
         <MapComponent />
+        {/* HISTORY TABLE*/}
+        <HistoryTable />
       </div>
     </div>
   );
