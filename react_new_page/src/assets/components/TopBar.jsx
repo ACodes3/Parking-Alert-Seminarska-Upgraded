@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  FiBell,
-  FiCalendar,
-  FiClock,
-  FiHelpCircle,
-  FiLifeBuoy,
-  FiLogOut,
-  FiMenu,
-  FiSettings,
-  FiUser,
+    FiBell,
+    FiCalendar,
+    FiClock,
+    FiHelpCircle,
+    FiLifeBuoy,
+    FiLogOut,
+    FiMenu,
+    FiSettings,
+    FiUser,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "../styles/pages-styles/topbar.css";
@@ -273,10 +273,9 @@ const TopBar = ({ onMenuClick }) => {
               >
                 {newsItems.map((item) => (
                   <li key={item} className="ticker-item">
-                    {isRedar(item) ? (
+                    <span className="ticker-dot" aria-hidden="true" />
+                    {isRedar(item) && (
                       <span className="ticker-avatar" aria-hidden="true">R</span>
-                    ) : (
-                      <span className="ticker-dot" aria-hidden="true" />
                     )}
                     <span className="ticker-text">{item}</span>
                   </li>
