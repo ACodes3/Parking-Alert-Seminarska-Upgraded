@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaFacebookF,
   FaGooglePlusG,
@@ -8,9 +8,16 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Toast from "../assets/components/Toast";
 import "../assets/styles/pages-styles/login.css";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login, user } = useAuth();
+
+  // If already logged in, go to home
+  useEffect(() => {
+    if (user) navigate("/", { replace: true });
+  }, [user, navigate]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -37,7 +44,8 @@ const Login = () => {
         throw new Error(data.message || "Login failed");
       }
 
-      localStorage.setItem("user", JSON.stringify(data));
+      // Store user in auth context (persists to localStorage)
+      login(data);
       setToastMessage("Prijava uspešna.");
       setToastType("success");
       setToastOpen(true);

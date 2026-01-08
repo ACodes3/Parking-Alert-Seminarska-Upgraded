@@ -1,22 +1,25 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./layouts/Layout";
+import Help from "./pages/Help";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
-import Help from "./pages/Help";
+import Settings from "./pages/Settings";
+import SignUp from "./pages/SignUp";
+import RequireAuth from "./routes/RequireAuth";
 
 const App = () => {
   return (
     <Routes>
-      {/* Routes WITH sidebar */}
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/help" element={<Help />} />
-        {/* later: dashboard, profile, settings, etc. */}
+      {/* Routes WITH sidebar (protected) */}
+      <Route element={<RequireAuth />}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/help" element={<Help />} />
+          {/* later: dashboard, profile, settings, etc. */}
+        </Route>
       </Route>
 
       {/* Routes WITHOUT sidebar */}

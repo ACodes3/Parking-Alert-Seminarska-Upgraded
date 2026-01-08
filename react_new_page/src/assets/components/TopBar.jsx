@@ -10,7 +10,8 @@ import {
   FiSettings,
   FiUser,
 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "../styles/pages-styles/topbar.css";
 
 const newsItems = [
@@ -49,26 +50,15 @@ const notificationSeed = [
 ];
 
 const TopBar = ({ onMenuClick }) => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [newsIndex, setNewsIndex] = useState(0);
   const [now, setNow] = useState(() => new Date());
   const [userOpen, setUserOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState(notificationSeed);
-  const [user, setUser] = useState(null);
   const userMenuRef = useRef(null);
   const notifMenuRef = useRef(null);
-
-  // 🔹 Load user from localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        setUser(null);
-      }
-    }
-  }, []);
 
   // Move the list by a single item height instead of the full list height
   const tickerTransform = useMemo(() => {
@@ -148,6 +138,12 @@ const TopBar = ({ onMenuClick }) => {
       curr.map((item) => (item.id === id ? { ...item, read: true } : item))
     );
     setNotifOpen(false);
+  };
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logout();
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -351,7 +347,7 @@ const TopBar = ({ onMenuClick }) => {
                 </li>
                 <li role="separator" className="divider"></li>
                 <li>
-                  <a href="#">
+                  <a href="#" onClick={handleLogout}>
                     <FiLogOut />
                     &nbsp;&nbsp;Odjava
                   </a>
