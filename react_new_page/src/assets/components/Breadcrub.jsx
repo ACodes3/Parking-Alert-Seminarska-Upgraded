@@ -4,12 +4,17 @@ import "../styles/additional-styles/breadcrumb.css";
 import AddWarden from "./modals/AddWarden";
 import ChooseLocationModal from "./modals/ChooseLoactionModal";
 import GPSModal from "./modals/GPSModal";
+import Toast from "./Toast";
 
 const Breadcrub = ({ showButtons = true }) => {
   const location = useLocation();
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
   const [isChooseLocationOpen, setIsChooseLocationOpen] = useState(false);
   const [isGPSOpen, setIsGPSOpen] = useState(false);
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
 
   const breadcrumbs = useMemo(() => {
     const paths = location.pathname.split("/").filter(Boolean);
@@ -38,8 +43,9 @@ const Breadcrub = ({ showButtons = true }) => {
   }, [location.pathname]);
 
   const handleAddWardenSubmit = () => {
-    // Handle form submission here
-    console.log("Redar prijavljen");
+    setToastMessage("Redar uspešno prijavljen.");
+    setToastType("success");
+    setToastOpen(true);
     setIsAddWardenOpen(false);
   };
 
@@ -79,6 +85,15 @@ const Breadcrub = ({ showButtons = true }) => {
 
   return (
     <>
+      <Toast
+        message={toastMessage}
+        open={toastOpen}
+        type={toastType}
+        duration={3000}
+        position="top-right"
+        onClose={() => setToastOpen(false)}
+      />
+
       <nav aria-label="Breadcrumb navigation" className="breadcrumb-nav">
         <ol className="breadcrumb-list">
           {breadcrumbs.map((crumb, index) => {

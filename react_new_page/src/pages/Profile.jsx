@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Breadcrub from "../assets/components/Breadcrub";
 import AddWarden from "../assets/components/modals/AddWarden";
 import DeleteModal from "../assets/components/modals/DeleteModal";
+import Toast from "../assets/components/Toast";
 import "../assets/styles/pages-styles/profile.css";
 
 const Profile = () => {
@@ -28,6 +29,10 @@ const Profile = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [isAddWardenOpen, setIsAddWardenOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
 
   // 🔹 Fetch user profile from backend
   useEffect(() => {
@@ -142,6 +147,14 @@ const Profile = () => {
   return (
     <div className="wrap-fluid">
       <div className="container-fluid paper-wrap bevel tlbr">
+        <Toast
+          message={toastMessage}
+          open={toastOpen}
+          type={toastType}
+          duration={3000}
+          position="top-right"
+          onClose={() => setToastOpen(false)}
+        />
         <Breadcrub showButtons={false} />
 
         <div className="content-wrap">
@@ -298,6 +311,12 @@ const Profile = () => {
       <AddWarden
         isOpen={isAddWardenOpen}
         onClose={() => setIsAddWardenOpen(false)}
+        onSubmit={() => {
+          setToastMessage("Redar uspešno prijavljen.");
+          setToastType("success");
+          setToastOpen(true);
+          setIsAddWardenOpen(false);
+        }}
       />
       <DeleteModal
         isOpen={isDeleteOpen}
