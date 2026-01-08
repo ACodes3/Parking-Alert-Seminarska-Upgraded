@@ -13,25 +13,24 @@ const Breadcrub = ({ showButtons = true }) => {
 
   const breadcrumbs = useMemo(() => {
     const paths = location.pathname.split("/").filter(Boolean);
-    
-    const breadcrumbItems = [
-      { label: "Domov", path: "/" }
-    ];
+
+    const breadcrumbItems = [{ label: "Domov", path: "/" }];
 
     let currentPath = "";
     paths.forEach((path) => {
       currentPath += `/${path}`;
-      
+
       // Create readable labels from path names
       const labels = {
-        "profile": "Profil",
-        "settings": "Nastavitve",
-        "search": "Iskanje",
-        "parking": "Parkiriščа",
-        "help": "Pomoč",
+        profile: "Profil",
+        settings: "Nastavitve",
+        search: "Iskanje",
+        parking: "Parkiriščа",
+        help: "Pomoč",
       };
-      
-      const label = labels[path] || path.charAt(0).toUpperCase() + path.slice(1);
+
+      const label =
+        labels[path] || path.charAt(0).toUpperCase() + path.slice(1);
       breadcrumbItems.push({ label, path: currentPath });
     });
 
@@ -45,9 +44,32 @@ const Breadcrub = ({ showButtons = true }) => {
   };
 
   const handleChooseLocationConfirm = (location) => {
-    // Handle location selection here
     console.log("Izbrana lokacija:", location);
     setIsChooseLocationOpen(false);
+
+    if (!location) return;
+
+    const movePin = () => {
+      if (window.moveSelectedParkingMarker) {
+        window.moveSelectedParkingMarker(
+          location.latitude,
+          location.longitude,
+          location.ime
+        );
+        return true;
+      }
+      return false;
+    };
+
+    // Try immediately
+    if (movePin()) return;
+
+    // If map is not ready yet, retry shortly
+    const interval = setInterval(() => {
+      if (movePin()) {
+        clearInterval(interval);
+      }
+    }, 100);
   };
 
   const handleGPSToggle = (enabled) => {
@@ -61,7 +83,7 @@ const Breadcrub = ({ showButtons = true }) => {
         <ol className="breadcrumb-list">
           {breadcrumbs.map((crumb, index) => {
             const isLast = index === breadcrumbs.length - 1;
-            
+
             return (
               <li key={crumb.path} className="breadcrumb-item">
                 {isLast ? (
@@ -81,21 +103,21 @@ const Breadcrub = ({ showButtons = true }) => {
 
         {showButtons && (
           <div className="breadcrumb-actions">
-            <button 
+            <button
               className="breadcrumb-btn btn-report"
               onClick={() => setIsAddWardenOpen(true)}
             >
               <i className="fa fa-exclamation-triangle"></i>
               Prijavi redarja
             </button>
-            <button 
+            <button
               className="breadcrumb-btn btn-location"
               onClick={() => setIsChooseLocationOpen(true)}
             >
               <i className="fa fa-map-marker"></i>
               Izberi lokacijo
             </button>
-            <button 
+            <button
               className="breadcrumb-btn btn-gps"
               onClick={() => setIsGPSOpen(true)}
             >

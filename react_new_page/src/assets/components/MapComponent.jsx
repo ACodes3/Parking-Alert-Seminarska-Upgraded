@@ -1,14 +1,14 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
-
-// custom green pin (current location)
 import greenPin from "../images/pin.png";
 
 const MapComponent = () => {
   const mapRef = useRef(null);
   const mapContainerRef = useRef(null);
+
   const currentLocationMarkerRef = useRef(null);
+  const selectedParkingMarkerRef = useRef(null);
   const parkingMarkersRef = useRef([]);
 
   const [parkingSpots, setParkingSpots] = useState([]);
@@ -20,7 +20,6 @@ const MapComponent = () => {
         const response = await fetch(
           "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/parkirna-mesta/"
         );
-
         const data = await response.json();
         setParkingSpots(data);
       } catch (error) {
@@ -31,9 +30,15 @@ const MapComponent = () => {
     fetchParkingSpots();
   }, []);
 
-  // 🔹 Initialize map
+  // 🔹 Initialize map (STRICTMODE SAFE)
   useEffect(() => {
-    if (mapRef.current || !mapContainerRef.current) return;
+    if (!mapContainerRef.current) return;
+    if (mapRef.current) return;
+
+    // 🔥 CRITICAL FIX: reset Leaflet internal ID
+    if (mapContainerRef.current._leaflet_id) {
+      delete mapContainerRef.current._leaflet_id;
+    }
 
     const map = L.map(mapContainerRef.current, {
       center: [46.056946, 14.505751],
@@ -52,7 +57,6 @@ const MapComponent = () => {
       }
     ).addTo(map);
 
-    // 🟢 GREEN ICON (current location)
     const greenIcon = new L.Icon({
       iconUrl: greenPin,
       shadowUrl:
@@ -63,52 +67,63 @@ const MapComponent = () => {
       shadowSize: [41, 41],
     });
 
-    // 🌍 Current location
-    map.whenReady(() => {
-      if (!navigator.geolocation) return;
-
+    // 🌍 Current location (GREEN)
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          if (!mapRef.current) return;
+
           const { latitude, longitude } = position.coords;
 
           if (currentLocationMarkerRef.current) {
             map.removeLayer(currentLocationMarkerRef.current);
           }
 
-          const marker = L.marker([latitude, longitude], {
-            icon: greenIcon,
-          })
+          const marker = L.marker([latitude, longitude], { icon: greenIcon })
             .addTo(map)
             .bindPopup("Vaša trenutna lokacija");
 
           currentLocationMarkerRef.current = marker;
-          map.setView([latitude, longitude], 13);
-          marker.openPopup();
         },
-        (error) => {
-          console.error("Geolocation error:", error.message);
-        }
+        (err) => console.error("Geolocation error:", err.message)
       );
-    });
+    }
+
+    // 🔴 Selected parking marker (GLOBAL API)
+    window.moveSelectedParkingMarker = (lat, lon, label) => {
+      if (!mapRef.current) return;
+
+      if (selectedParkingMarkerRef.current) {
+        mapRef.current.removeLayer(selectedParkingMarkerRef.current);
+      }
+
+      const marker = L.marker([lat, lon], { icon: greenIcon })
+        .addTo(mapRef.current)
+        .bindPopup(label);
+
+      selectedParkingMarkerRef.current = marker;
+      mapRef.current.flyTo([lat, lon], 15, { animate: true });
+      marker.openPopup();
+    };
 
     return () => {
+      delete window.moveSelectedParkingMarker;
       map.remove();
       mapRef.current = null;
     };
   }, []);
 
-  // 🔹 Render parking spot markers
+  // 🔹 Render parking markers (STATIC MARKERS)
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Remove old markers
-    parkingMarkersRef.current.forEach((marker) => marker.remove());
+    parkingMarkersRef.current.forEach((m) => m.remove());
     parkingMarkersRef.current = [];
 
     parkingSpots.forEach((spot) => {
       const marker = L.marker([spot.latitude, spot.longitude])
         .addTo(mapRef.current)
-        .bindPopup(`<b>${spot.ime}</b>`);
+        .bindPopup(spot.ime);
 
       parkingMarkersRef.current.push(marker);
     });
