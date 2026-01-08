@@ -1,22 +1,44 @@
 import { useState } from "react";
-import { FaFacebookF, FaGooglePlusG, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import {
+  FaFacebookF,
+  FaGooglePlusG,
+  FaInstagram,
+  FaTwitter,
+} from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import "../assets/styles/pages-styles/login.css";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: Replace with real login logic
-    console.log({
-      email,
-      password,
-      rememberMe,
-    });
+    try {
+      const response = await fetch(
+        "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/login/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      localStorage.setItem("user", JSON.stringify(data));
+
+      navigate("/"); // ✅ NOW WORKS
+    } catch (error) {
+      console.error("Login error:", error.message);
+    }
   };
 
   return (
@@ -86,10 +108,7 @@ const Login = () => {
                 </div>
 
                 {/* Submit */}
-                <button
-                  type="submit"
-                  className="btn btn-primary pull-right"
-                >
+                <button type="submit" className="btn btn-primary pull-right">
                   Prijava
                 </button>
               </form>
@@ -108,8 +127,17 @@ const Login = () => {
                       href="/old_page/front-end/index.html"
                       className="btn btn-facebook btn-block"
                     >
-                      <FaFacebookF style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Facebook</span>
+                      <FaFacebookF
+                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                      />
+                      <span
+                        style={{
+                          borderLeft: "1px solid rgba(255,255,255,0.3)",
+                          paddingLeft: "8px",
+                        }}
+                      >
+                        Facebook
+                      </span>
                     </a>
                   </div>
                   <div className="col-md-6 row-block">
@@ -117,8 +145,17 @@ const Login = () => {
                       href="/old_page/front-end/index.html"
                       className="btn btn-twitter btn-block"
                     >
-                      <FaTwitter style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Twitter</span>
+                      <FaTwitter
+                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                      />
+                      <span
+                        style={{
+                          borderLeft: "1px solid rgba(255,255,255,0.3)",
+                          paddingLeft: "8px",
+                        }}
+                      >
+                        Twitter
+                      </span>
                     </a>
                   </div>
                 </div>
@@ -129,8 +166,17 @@ const Login = () => {
                       href="/old_page/front-end/index.html"
                       className="btn btn-google btn-block"
                     >
-                      <FaGooglePlusG style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Google +</span>
+                      <FaGooglePlusG
+                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                      />
+                      <span
+                        style={{
+                          borderLeft: "1px solid rgba(255,255,255,0.3)",
+                          paddingLeft: "8px",
+                        }}
+                      >
+                        Google +
+                      </span>
                     </a>
                   </div>
                   <div className="col-md-6 row-block">
@@ -138,8 +184,17 @@ const Login = () => {
                       href="/old_page/front-end/index.html"
                       className="btn btn-instagram btn-block"
                     >
-                      <FaInstagram style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Instagram</span>
+                      <FaInstagram
+                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                      />
+                      <span
+                        style={{
+                          borderLeft: "1px solid rgba(255,255,255,0.3)",
+                          paddingLeft: "8px",
+                        }}
+                      >
+                        Instagram
+                      </span>
                     </a>
                   </div>
                 </div>
@@ -150,10 +205,7 @@ const Login = () => {
               {/* Create Account */}
               <div className="row">
                 <div className="col-md-12 row-block">
-                  <Link
-                    to="/sign-up"
-                    className="btn btn-primary btn-block"
-                  >
+                  <Link to="/sign-up" className="btn btn-primary btn-block">
                     Ustvari novi račun
                   </Link>
                 </div>
@@ -165,9 +217,7 @@ const Login = () => {
 
       {/* Footer */}
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <h6 style={{ color: "#fff" }}>
-          Parking Alert v 2.1. TPO projekt
-        </h6>
+        <h6 style={{ color: "#fff" }}>Parking Alert v 2.1. TPO projekt</h6>
       </div>
 
       {/* Toast container */}
