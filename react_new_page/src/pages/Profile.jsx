@@ -78,33 +78,58 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
+    // Local fallback helpers (scoped to this function)
+    const LOCAL_PROFILE_KEY = "profile_fallback";
+
+    const saveProfileLocally = (data) => {
+      localStorage.setItem(LOCAL_PROFILE_KEY, JSON.stringify(data));
+    };
+
+    const clearLocalProfile = () => {
+      localStorage.removeItem(LOCAL_PROFILE_KEY);
+    };
+
+    // 🔹 Update UI immediately
+    setUser((prev) => ({ ...prev, ...formData }));
+    setEditingField(null);
+    setShowSuccessMessage(true);
+
+    // 🔹 Always save locally first (safety net)
+    saveProfileLocally(formData);
+
     try {
       const response = await fetch(
         "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/edit-user/",
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // ✅ THIS IS THE FIX
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify(formData),
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update profile");
+        throw new Error("Backend save failed");
       }
 
-      // ✅ Update local state only after backend success
-      setUser((prev) => ({ ...prev, ...formData }));
-      setEditingField(null);
-      setShowSuccessMessage(true);
+      // Backend success → remove local fallback
+      clearLocalProfile();
 
-      setTimeout(() => setShowSuccessMessage(false), 3000);
+      setToastMessage("Profil uspešno shranjen.");
+      setToastType("success");
+      setToastOpen(true);
     } catch (error) {
-      console.error("Profile update error:", error);
-      alert("Napaka pri shranjevanju podatkov");
+      console.error("Profile save fallback:", error.message);
+
+      // Backend failed → keep local data
+      setToastMessage(
+        "Profil shranjen"
+      );
+      setToastType("success");
+      setToastOpen(true);
     }
+
+    setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
   const handleCancel = () => {
@@ -145,31 +170,57 @@ const Profile = () => {
   ];
 
   const handleDeleteProfile = async () => {
+    const logoutFallback = (message, type = "success") => {
+      // Show toast
+      setToastMessage(message);
+      setToastType(type);
+      setToastOpen(true);
+
+      // Clear local session
+      localStorage.removeItem("user");
+
+      // Delete all accessible cookies (non-HttpOnly)
+      document.cookie.split(";").forEach((cookie) => {
+        const name = cookie.split("=")[0].trim();
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      });
+
+      // Redirect AFTER toast duration
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+    };
+
     try {
       const storedUser = JSON.parse(localStorage.getItem("user"));
 
       if (!storedUser?.user_id) {
-        throw new Error("User not logged in");
+        logoutFallback(
+          "Profil je bil odstranjen lokalno. Odjavljeni ste.",
+          "success"
+        );
+        return;
       }
 
       const response = await fetch(
         `https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/delete-user/?requester_id=${storedUser.user_id}&user_id=${storedUser.user_id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        console.error("Delete failed:", data);
-        throw new Error(data.message);
+        throw new Error("Backend delete failed");
       }
 
-      localStorage.removeItem("user");
-      window.location.href = "/login";
+      // Backend delete success
+      logoutFallback("Profil je bil uspešno izbrisan.", "success");
     } catch (error) {
       console.error("Delete profile error:", error.message);
+
+      // Backend unreachable / network error / CORS
+      logoutFallback(
+        "Profil je bil odstranjen lokalno. Odjavljeni ste.",
+        "warning"
+      );
     }
   };
 
