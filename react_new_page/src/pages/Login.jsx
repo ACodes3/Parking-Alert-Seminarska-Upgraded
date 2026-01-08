@@ -6,6 +6,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import Toast from "../assets/components/Toast";
 import "../assets/styles/pages-styles/login.css";
 
 const Login = () => {
@@ -13,6 +14,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("info");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,15 +38,32 @@ const Login = () => {
       }
 
       localStorage.setItem("user", JSON.stringify(data));
+      setToastMessage("Prijava uspešna.");
+      setToastType("success");
+      setToastOpen(true);
 
-      navigate("/"); // ✅ NOW WORKS
+      // Show toast briefly, then navigate to home
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
       console.error("Login error:", error.message);
+      setToastMessage(error.message || "Napaka pri prijavi.");
+      setToastType("error");
+      setToastOpen(true);
     }
   };
 
   return (
     <div className="container">
+      <Toast
+        message={toastMessage}
+        open={toastOpen}
+        type={toastType}
+        duration={3000}
+        position="top-right"
+        onClose={() => setToastOpen(false)}
+      />
       {/* Preloader */}
       <div id="preloader">
         <div id="status">&nbsp;</div>
@@ -219,9 +240,6 @@ const Login = () => {
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <h6 style={{ color: "#fff" }}>Parking Alert v 2.1. TPO projekt</h6>
       </div>
-
-      {/* Toast container */}
-      <div id="toast-container"></div>
     </div>
   );
 };
