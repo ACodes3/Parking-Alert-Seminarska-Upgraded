@@ -11,6 +11,11 @@ const MapComponent = () => {
   const selectedParkingMarkerRef = useRef(null);
   const parkingMarkersRef = useRef([]);
 
+  // ✅ ADD THIS (this was missing)
+  const greenIconRef = useRef(null);
+  const blueIconRef = useRef(null);
+  const redIconRef = useRef(null);
+
   const [parkingSpots, setParkingSpots] = useState([]);
 
   // 🔹 Fetch parking spots
@@ -35,7 +40,7 @@ const MapComponent = () => {
     if (!mapContainerRef.current) return;
     if (mapRef.current) return;
 
-    // 🔥 CRITICAL FIX: reset Leaflet internal ID
+    // Reset Leaflet internal ID (StrictMode fix)
     if (mapContainerRef.current._leaflet_id) {
       delete mapContainerRef.current._leaflet_id;
     }
@@ -57,7 +62,9 @@ const MapComponent = () => {
       }
     ).addTo(map);
 
-    const greenIcon = new L.Icon({
+    // ✅ Create icons ONCE and store in refs
+    // Green icon for current location
+    greenIconRef.current = new L.Icon({
       iconUrl: greenPin,
       shadowUrl:
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
@@ -67,7 +74,31 @@ const MapComponent = () => {
       shadowSize: [41, 41],
     });
 
-    // 🌍 Current location (GREEN)
+    // Blue icon for parking spots (default Leaflet marker)
+    blueIconRef.current = new L.Icon({
+      iconUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
+    // Red icon for selected parking spot
+    redIconRef.current = new L.Icon({
+      iconUrl:
+        "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
+    // 🌍 Current location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -79,7 +110,10 @@ const MapComponent = () => {
             map.removeLayer(currentLocationMarkerRef.current);
           }
 
-          const marker = L.marker([latitude, longitude], { icon: greenIcon })
+          const marker = L.marker(
+            [latitude, longitude],
+            { icon: greenIconRef.current }
+          )
             .addTo(map)
             .bindPopup("Vaša trenutna lokacija");
 
@@ -97,7 +131,10 @@ const MapComponent = () => {
         mapRef.current.removeLayer(selectedParkingMarkerRef.current);
       }
 
-      const marker = L.marker([lat, lon], { icon: greenIcon })
+      const marker = L.marker(
+        [lat, lon],
+        { icon: redIconRef.current }
+      )
         .addTo(mapRef.current)
         .bindPopup(label);
 
@@ -115,13 +152,16 @@ const MapComponent = () => {
 
   // 🔹 Render parking markers (STATIC MARKERS)
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !blueIconRef.current) return;
 
     parkingMarkersRef.current.forEach((m) => m.remove());
     parkingMarkersRef.current = [];
 
     parkingSpots.forEach((spot) => {
-      const marker = L.marker([spot.latitude, spot.longitude])
+      const marker = L.marker(
+        [spot.latitude, spot.longitude],
+        { icon: blueIconRef.current }
+      )
         .addTo(mapRef.current)
         .bindPopup(spot.ime);
 
