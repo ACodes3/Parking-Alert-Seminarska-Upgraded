@@ -144,6 +144,35 @@ const Profile = () => {
     },
   ];
 
+  const handleDeleteProfile = async () => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+
+      if (!storedUser?.user_id) {
+        throw new Error("User not logged in");
+      }
+
+      const response = await fetch(
+        `https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/delete-user/?requester_id=${storedUser.user_id}&user_id=${storedUser.user_id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Delete failed:", data);
+        throw new Error(data.message);
+      }
+
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Delete profile error:", error.message);
+    }
+  };
+
   return (
     <div className="wrap-fluid">
       <div className="container-fluid paper-wrap bevel tlbr">
@@ -321,6 +350,7 @@ const Profile = () => {
       <DeleteModal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDeleteProfile}
       />
     </div>
   );
