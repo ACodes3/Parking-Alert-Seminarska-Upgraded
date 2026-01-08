@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-    FiBell,
-    FiCalendar,
-    FiClock,
-    FiHelpCircle,
-    FiLifeBuoy,
-    FiLogOut,
-    FiMenu,
-    FiSettings,
-    FiUser,
+  FiBell,
+  FiCalendar,
+  FiClock,
+  FiHelpCircle,
+  FiLifeBuoy,
+  FiLogOut,
+  FiMenu,
+  FiSettings,
+  FiUser,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import "../styles/pages-styles/topbar.css";
@@ -54,8 +54,21 @@ const TopBar = ({ onMenuClick }) => {
   const [userOpen, setUserOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifications, setNotifications] = useState(notificationSeed);
+  const [user, setUser] = useState(null);
   const userMenuRef = useRef(null);
   const notifMenuRef = useRef(null);
+
+  // 🔹 Load user from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
 
   // Move the list by a single item height instead of the full list height
   const tickerTransform = useMemo(() => {
@@ -209,10 +222,15 @@ const TopBar = ({ onMenuClick }) => {
                     <button
                       key={item.id}
                       type="button"
-                      className={`notif-item ${item.read ? "is-read" : "is-unread"}`}
+                      className={`notif-item ${
+                        item.read ? "is-read" : "is-unread"
+                      }`}
                       onClick={() => markOneRead(item.id)}
                     >
-                      <div className={`notif-dot type-${item.type}`} aria-hidden="true" />
+                      <div
+                        className={`notif-dot type-${item.type}`}
+                        aria-hidden="true"
+                      />
                       <div className="notif-content">
                         <div className="notif-row">
                           <span className="notif-item-title">{item.title}</span>
@@ -275,7 +293,9 @@ const TopBar = ({ onMenuClick }) => {
                   <li key={item} className="ticker-item">
                     <span className="ticker-dot" aria-hidden="true" />
                     {isRedar(item) && (
-                      <span className="ticker-avatar" aria-hidden="true">R</span>
+                      <span className="ticker-avatar" aria-hidden="true">
+                        R
+                      </span>
                     )}
                     <span className="ticker-text">{item}</span>
                   </li>
@@ -305,7 +325,8 @@ const TopBar = ({ onMenuClick }) => {
                   alt="User"
                   className="admin-pic img-circle"
                 />
-                Pozdravljeni, <span>Uporabnik</span>
+                Pozdravljeni,{" "}
+                <span>{user?.username || user?.email || "Uporabnik"}</span>
                 <b className="caret"></b>
               </a>
 

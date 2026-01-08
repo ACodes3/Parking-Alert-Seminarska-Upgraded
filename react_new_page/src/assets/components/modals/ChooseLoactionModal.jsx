@@ -1,53 +1,42 @@
 import { useEffect, useMemo, useState } from "react";
 import "../../styles/additional-styles/chooseLocationModal.css";
 
-const PARKING_LOCATIONS = [
-  "Parkirna hiša Tivoli",
-  "Parkirna hiša Linhartova",
-  "Parkirna hiša Sanatorij Emona",
-  "Parkirno mesto Petkovskovo Nabrežje",
-  "Parkirno mesto NUK",
-  "Parkirno mesto Kongresni trg",
-  "Parkirno mesto Trg Republike",
-  "Parkirno mesto Trg Osvobodilne fronte",
-  "Parkirno mesto Trg Francoske revolucije",
-  "Parkirno mesto Trg Prešernovega trga",
-  "Parkirno mesto Trg Črnuče",
-  "Parkirno mesto Trg Ajševica",
-  "Parkirno mesto Trg Barje",
-  "Parkirno mesto Trg Šiška",
-  "Parkirno mesto Trg Moste",
-  "Parkirno mesto Trg Bežigrad",
-  "Parkirno mesto Trg Vič",
-  "Parkirno mesto Trg Rudnik",
-  "Parkirno mesto Trg Jarše",
-  "Parkirno mesto Trg Črnuče II",
-  "Parkirno mesto Brdo",
-  "Parkirno mesto Stožice",
-  "Parkirno mesto Zalog",
-  "Parkirno mesto Rakova Jelša",
-  "Parkirno mesto Polje",
-  "Parkirno mesto Rožna dolina",
-  "Parkirno mesto Murgle",
-  "Parkirno mesto Ježica",
-  "Parkirno mesto BTC City",
-  "Parkirno mesto Žale",
-];
-
 const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
   const [search, setSearch] = useState("");
   const [selectedParking, setSelectedParking] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [parkingLocations, setParkingLocations] = useState([]);
 
+  // 🔹 Prevent background scroll when modal open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
 
+  // 🔹 Fetch parking locations from backend
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const fetchParkingLocations = async () => {
+      try {
+        const response = await fetch(
+          "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/parkirna-mesta/"
+        );
+        const data = await response.json();
+        setParkingLocations(data);
+      } catch (error) {
+        console.error("Failed to fetch parking locations:", error);
+      }
+    };
+
+    fetchParkingLocations();
+  }, [isOpen]);
+
+  // 🔹 Filter parking by search
   const filteredParking = useMemo(() => {
-    return PARKING_LOCATIONS.filter((p) =>
-      p.toLowerCase().includes(search.toLowerCase())
+    return parkingLocations.filter((p) =>
+      p.ime.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+  }, [search, parkingLocations]);
 
   if (!isOpen) return null;
 
@@ -57,7 +46,7 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
         <div className="modal-content">
           {/* HEADER */}
           <div className="modal-header">
-            <h5 className="modal-title">Izberi Lokacijo</h5>
+            <h5 className="modal-title">Izberi lokacijo</h5>
             <button className="close" onClick={onClose}>
               &times;
             </button>
@@ -73,25 +62,33 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
                 placeholder="Iskanje parkirišča..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                onClick={() => setDropdownVisible(!dropdownVisible)}
+                onClick={() => setDropdownVisible(true)}
               />
 
               {dropdownVisible && (
                 <div className="dropdown-parking">
                   <ul className="dropdown-list">
+                    {filteredParking.length === 0 && (
+                      <li className="dropdown-empty">
+                        Ni zadetkov
+                      </li>
+                    )}
+
                     {filteredParking.map((parking) => (
                       <li
-                        key={parking}
+                        key={parking.id}
                         className={
-                          selectedParking === parking ? "selected" : ""
+                          selectedParking?.id === parking.id
+                            ? "selected"
+                            : ""
                         }
                         onClick={() => {
                           setSelectedParking(parking);
-                          setSearch(parking);
+                          setSearch(parking.ime);
                           setDropdownVisible(false);
                         }}
                       >
-                        {parking}
+                        {parking.ime}
                       </li>
                     ))}
                   </ul>
@@ -108,9 +105,9 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
             <button
               className="btn btn-primary"
               type="button"
+              disabled={!selectedParking}
               onClick={() => {
-                if (!selectedParking) return;
-                onConfirm(selectedParking);
+                onConfirm(selectedParking); // 👈 full object
                 onClose();
               }}
             >
