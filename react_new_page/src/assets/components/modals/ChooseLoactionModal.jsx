@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import "../../styles/additional-styles/chooseLocationModal.css";
+import Toast from "../Toast";
 
 const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
   const [search, setSearch] = useState("");
   const [selectedParking, setSelectedParking] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [parkingLocations, setParkingLocations] = useState([]);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("info");
 
   // 🔹 Prevent background scroll when modal open
   useEffect(() => {
@@ -31,6 +35,21 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
     fetchParkingLocations();
   }, [isOpen]);
 
+  // 🔹 Demo: mark some locations as having a warden
+  const wardenLocationIds = useMemo(() => {
+    if (!parkingLocations?.length) return new Set();
+
+    // Prefer well-known names if present; otherwise, fallback to first 3
+    const nameMatches = ["slovenska", "tivoli", "trg", "republike"].map((n) => n.toLowerCase());
+    const matched = parkingLocations.filter((p) => {
+      const name = (p.ime || "").toLowerCase();
+      return nameMatches.some((m) => name.includes(m));
+    });
+
+    const chosen = (matched.length ? matched : parkingLocations.slice(0, 3)).map((p) => p.id);
+    return new Set(chosen);
+  }, [parkingLocations]);
+
   // 🔹 Filter parking by search
   const filteredParking = useMemo(() => {
     return parkingLocations.filter((p) =>
@@ -44,6 +63,14 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
     <div className="custom-modal" id="izberiParkirisceModal">
       <div className="modal-dialog dropdown-dialog">
         <div className="modal-content">
+          {/* Toast */}
+          <Toast
+            message={toastMessage}
+            open={toastOpen}
+            type={toastType}
+            position="top-right"
+            onClose={() => setToastOpen(false)}
+          />
           {/* HEADER */}
           <div className="modal-header">
             <h5 className="modal-title">Izberi lokacijo</h5>
@@ -89,6 +116,11 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
                         }}
                       >
                         {parking.ime}
+                        {wardenLocationIds.has(parking.id) && (
+                          <span className="chip chip-warning" style={{ marginLeft: 8 }}>
+                            Redar
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -107,8 +139,21 @@ const ChooseLocationModal = ({ isOpen, onClose, onConfirm }) => {
               type="button"
               disabled={!selectedParking}
               onClick={() => {
-                onConfirm(selectedParking); // 👈 full object
-                onClose();
+                if (!selectedParking) return;
+                const hasWarden = wardenLocationIds.has(selectedParking.id);
+                if (hasWarden) {
+                  // Show toast first, then confirm and close after a short delay
+                  setToastMessage("Na izbrani lokaciji je redar.");
+                  setToastType("warning");
+                  setToastOpen(true);
+                  setTimeout(() => {
+                    onConfirm(selectedParking);
+                    onClose();
+                  }, 1200);
+                } else {
+                  onConfirm(selectedParking);
+                  onClose();
+                }
               }}
             >
               Izberi
