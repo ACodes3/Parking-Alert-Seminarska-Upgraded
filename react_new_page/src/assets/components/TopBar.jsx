@@ -247,9 +247,9 @@ const TopBar = ({ onMenuClick }) => {
             </li>
 
             <li>
-              <a href="/help" aria-label="Help">
+              <Link to="/help" aria-label="Help">
                 <FiHelpCircle style={{ fontSize: "20px" }} />
-              </a>
+              </Link>
             </li>
           </ul>
 
@@ -340,10 +340,10 @@ const TopBar = ({ onMenuClick }) => {
                   </Link>
                 </li>
                 <li>
-                  <a href="/help">
+                  <Link to="/help">
                     <FiLifeBuoy />
                     &nbsp;&nbsp;Pomoč
-                  </a>
+                  </Link>
                 </li>
                 <li role="separator" className="divider"></li>
                 <li>

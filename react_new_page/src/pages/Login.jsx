@@ -14,10 +14,13 @@ const Login = () => {
   const navigate = useNavigate();
   const { login, user } = useAuth();
 
-  // If already logged in, go to home
+  // If already logged in and not in the middle of a fresh login, go to home
+  const [hasInitiatedLogin, setHasInitiatedLogin] = useState(false);
   useEffect(() => {
-    if (user) navigate("/", { replace: true });
-  }, [user, navigate]);
+    if (user && !hasInitiatedLogin) {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate, hasInitiatedLogin]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -29,6 +32,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setHasInitiatedLogin(true);
       const response = await fetch(
         "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/login/",
         {
@@ -52,13 +56,14 @@ const Login = () => {
 
       // Show toast briefly, then navigate to home
       setTimeout(() => {
-        navigate("/");
-      }, 1000);
+        navigate("/", { replace: true });
+      }, 1500);
     } catch (error) {
       console.error("Login error:", error.message);
       setToastMessage(error.message || "Napaka pri prijavi.");
       setToastType("error");
       setToastOpen(true);
+      setHasInitiatedLogin(false);
     }
   };
 
@@ -68,7 +73,7 @@ const Login = () => {
         message={toastMessage}
         open={toastOpen}
         type={toastType}
-        duration={3000}
+        duration={1000}
         position="top-right"
         onClose={() => setToastOpen(false)}
       />
