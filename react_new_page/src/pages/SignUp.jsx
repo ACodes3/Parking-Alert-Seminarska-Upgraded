@@ -1,29 +1,92 @@
 import { useState } from "react";
 import { FaFacebookF, FaGooglePlusG, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Toast from "../assets/components/Toast";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  // Form state
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [bio, setBio] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  // Toast state
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState("success");
+
+  const showToast = (message, type = "info") => {
+    setToastMessage(message);
+    setToastType(type);
+    setToastOpen(true);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // TODO: replace with real register logic
-    console.log({
-      email,
+    if (!username || !email || !password || !name || !surname) {
+      showToast("Prosimo, izpolnite vsa obvezna polja.", "warning");
+      return;
+    }
+
+    const payload = {
+      username,
       password,
-      rememberMe,
-    });
+      name,
+      surname,
+      bio,
+      email,
+      phone,
+    };
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://parkingalert-backend-dnenavazhgaye7h8.northeurope-01.azurewebsites.net/api/signup/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Signup failed");
+      }
+
+      showToast("Račun uspešno ustvarjen. Preusmerjanje na prijavo …", "success");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+      showToast("Napaka pri registraciji. Poskusite znova.", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="container">
-      {/* Preloader */}
-      <div id="preloader">
-        <div id="status">&nbsp;</div>
-      </div>
+      {/* Toast */}
+      <Toast
+        message={toastMessage}
+        open={toastOpen}
+        type={toastType}
+        position="top-right"
+        onClose={() => setToastOpen(false)}
+      />
 
       <div id="login-wrapper">
         {/* Logo */}
@@ -37,132 +100,127 @@ const SignUp = () => {
           </div>
         </div>
 
-        {/* Sign up box */}
+        {/* Signup box */}
         <div className="row">
           <div className="col-md-4 col-md-offset-4">
             <div className="account-box">
               <form onSubmit={handleSubmit}>
-                {/* Email */}
                 <div className="form-group">
-                  <label htmlFor="email">e-pošta</label>
+                  <label>Uporabniško ime *</label>
                   <input
-                    type="text"
-                    id="email"
+                    className="form-control"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Ime *</label>
+                  <input
+                    className="form-control"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Priimek *</label>
+                  <input
+                    className="form-control"
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>E-pošta *</label>
+                  <input
+                    type="email"
                     className="form-control"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
-                {/* Password */}
                 <div className="form-group">
-                  <label htmlFor="password">Geslo</label>
+                  <label>Geslo *</label>
                   <input
                     type="password"
-                    id="password"
                     className="form-control"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
-                {/* Remember me */}
-                <div className="checkbox pull-left">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                    />{" "}
-                    Zapomni me
-                  </label>
+                <div className="form-group">
+                  <label>Telefon</label>
+                  <input
+                    className="form-control"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
                 </div>
 
-                {/* Submit */}
+                <div className="form-group">
+                  <label>Bio</label>
+                  <textarea
+                    className="form-control"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  className="btn btn-primary pull-right"
+                  className="btn btn-primary btn-block"
+                  disabled={loading}
                 >
-                  Ustvari račun
+                  {loading ? "Ustvarjanje računa…" : "Ustvari račun"}
                 </button>
               </form>
 
-              <div className="or-box">
-                <div style={{ textAlign: "center" }}>
-                  <span className="login-with">Prijava</span>
-                </div>
-
-                {/* Social buttons */}
-                <div className="row">
-                  <div className="col-md-6 row-block">
-                    <a href="#" className="btn btn-facebook btn-block">
-                      <FaFacebookF style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Facebook</span>
-                    </a>
-                  </div>
-                  <div className="col-md-6 row-block">
-                    <a href="#" className="btn btn-twitter btn-block">
-                      <FaTwitter style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Twitter</span>
-                    </a>
-                  </div>
-                </div>
-
-                <div className="row" style={{ marginTop: "25px" }}>
-                  <div className="col-md-6 row-block">
-                    <a href="#" className="btn btn-google btn-block">
-                      <FaGooglePlusG style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Google +</span>
-                    </a>
-                  </div>
-                  <div className="col-md-6 row-block">
-                    <a href="#" className="btn btn-instagram btn-block">
-                      <FaInstagram style={{ marginRight: "8px", verticalAlign: "middle" }} />
-                      <span style={{ borderLeft: "1px solid rgba(255,255,255,0.3)", paddingLeft: "8px" }}>Instagram</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
               <hr />
 
-              {/* Already have account */}
-              <div className="row">
-                <div
-                  className="col-md-12 row-block"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
-                  <label>Ali imate že račun?</label>
-                  <Link
-                    to="/login"
-                    className="btn btn-primary btn-block"
-                  >
-                    Prijavi se
-                  </Link>
+              <div style={{ textAlign: "center" }}>
+                <label>Ali imate že račun?</label>
+                <Link to="/login" className="btn btn-default btn-block">
+                  Prijavi se
+                </Link>
+              </div>
+
+              {/* Social buttons (UI only) */}
+              <div className="or-box">
+                <div className="row">
+                  <div className="col-md-6">
+                    <button className="btn btn-facebook btn-block">
+                      <FaFacebookF /> Facebook
+                    </button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-twitter btn-block">
+                      <FaTwitter /> Twitter
+                    </button>
+                  </div>
+                </div>
+
+                <div className="row" style={{ marginTop: "10px" }}>
+                  <div className="col-md-6">
+                    <button className="btn btn-google btn-block">
+                      <FaGooglePlusG /> Google
+                    </button>
+                  </div>
+                  <div className="col-md-6">
+                    <button className="btn btn-instagram btn-block">
+                      <FaInstagram /> Instagram
+                    </button>
+                  </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div style={{ textAlign: "center", margin: "0 auto" }}>
-        <h6 style={{ color: "#fff" }}>
-          Parking Alert v 2.1. TPO projekt
-        </h6>
-      </div>
-
-      {/* Background map layer */}
-      <div id="test1" className="gmap3"></div>
-
-      {/* Toast container */}
-      <div id="toast-container"></div>
     </div>
   );
 };
